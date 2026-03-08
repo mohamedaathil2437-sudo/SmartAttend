@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartAttend | 20h Cycle</title>
+    <title>SmartAttend | College Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; }
         .view-section { display: none; }
-        .view-section.active { display: block; animation: fadeIn 0.3s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); opacity: 0; } to { opacity: 1; transform: scale(1); } }
+        .view-section.active { display: block; }
         .code-font { font-family: 'Courier New', monospace; letter-spacing: 0.3em; }
+        .progress-bar { transition: width 1s linear; }
     </style>
 </head>
 <body class="min-h-screen">
@@ -19,52 +19,51 @@
     <nav class="bg-white border-b border-slate-200 px-6 py-4 flex justify-between items-center sticky top-0 z-50">
         <span class="text-xl font-800 tracking-tighter text-indigo-600">SmartAttend</span>
         <div id="navActions" class="hidden flex gap-3">
-            <button onclick="logout()" class="text-slate-400 font-bold text-xs hover:text-red-500">Logout</button>
+            <button onclick="logout()" class="text-slate-400 font-bold text-xs">Logout</button>
         </div>
     </nav>
 
     <main class="max-w-md mx-auto p-6">
 
         <section id="loginView" class="view-section active mt-20 text-center">
-            <div class="bg-white p-8 rounded-3xl shadow-sm border">
-                <h1 class="text-2xl font-800 mb-6">Attendance Portal</h1>
-                <button id="googleBtn" class="w-full bg-indigo-600 text-white p-4 rounded-2xl font-bold shadow-lg shadow-indigo-100">Login with Google</button>
-            </div>
+            <button id="googleBtn" class="w-full bg-indigo-600 text-white p-4 rounded-2xl font-bold shadow-lg">Login with Google</button>
         </section>
 
         <section id="roleView" class="view-section mt-10 space-y-4">
-            <h2 class="text-2xl font-800 text-center mb-6">Who are you?</h2>
-            <button onclick="saveRole('student')" class="w-full bg-white p-6 rounded-2xl border-2 hover:border-indigo-600 font-bold transition-all">🎓 Student</button>
-            <button onclick="saveRole('teacher')" class="w-full bg-white p-6 rounded-2xl border-2 hover:border-rose-600 font-bold transition-all">👨‍🏫 Teacher</button>
+            <h2 class="text-2xl font-800 text-center">Select Role</h2>
+            <button onclick="saveRole('student')" class="w-full bg-white p-6 rounded-2xl border-2 font-bold">Student</button>
+            <button onclick="saveRole('teacher')" class="w-full bg-white p-6 rounded-2xl border-2 font-bold">Teacher</button>
         </section>
 
         <section id="studentView" class="view-section space-y-6">
-            <div class="bg-indigo-600 p-8 rounded-[2rem] text-white shadow-xl shadow-indigo-100">
-                <h2 class="text-xl font-800 mb-4">Live Code Entry</h2>
-                <input type="text" id="codeEntry" maxlength="6" class="w-full p-4 rounded-xl text-slate-900 text-4xl font-black text-center code-font mb-4 outline-none" placeholder="000000">
-                <button onclick="submitAttendance()" class="w-full bg-white text-indigo-600 font-800 py-4 rounded-xl hover:bg-slate-100 transition-all">Mark Attendance</button>
+            <div class="bg-indigo-600 p-8 rounded-[2rem] text-white shadow-xl">
+                <h2 class="text-xl font-800 mb-4">Enter Code</h2>
+                <input type="text" id="codeEntry" maxlength="6" class="w-full p-4 rounded-xl text-slate-900 text-4xl font-black text-center code-font mb-4" placeholder="------">
+                <button onclick="submitAttendance()" class="w-full bg-white text-indigo-600 font-800 py-4 rounded-xl">Submit Attendance</button>
             </div>
             <div id="studentHistory" class="space-y-2"></div>
         </section>
 
         <section id="teacherView" class="view-section text-center space-y-6">
             <div class="bg-white p-8 rounded-[2.5rem] border shadow-sm">
-                <div id="displayCode" class="text-7xl font-900 text-slate-200 mb-6 code-font tracking-tighter">------</div>
+                <div id="displayCode" class="text-7xl font-900 text-slate-200 mb-6 code-font">------</div>
                 
-                <div class="grid grid-cols-2 gap-3">
-                    <button id="sessionBtn" onclick="toggleSession()" class="bg-indigo-600 text-white font-800 py-4 rounded-2xl shadow-lg shadow-indigo-100">Start Session</button>
-                    <button onclick="manualResetAndExport()" class="bg-rose-50 text-rose-600 border border-rose-100 font-800 py-4 rounded-2xl hover:bg-rose-100 transition-all">Reset & Save</button>
+                <div id="timerWrapper" class="hidden mb-6">
+                    <div class="flex justify-between text-[10px] font-black text-slate-400 uppercase mb-1">
+                        <span>Code expires in:</span>
+                        <span id="secondsLabel">30s</span>
+                    </div>
+                    <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                        <div id="timerBar" class="progress-bar bg-indigo-500 h-full w-full"></div>
+                    </div>
                 </div>
-                
-                <p id="expiryLabel" class="mt-6 text-[10px] font-black text-slate-400 uppercase tracking-widest hidden">
-                    Cycle Expires in: <span id="hoursLeft" class="text-rose-500">20h 00m</span>
-                </p>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <button id="sessionBtn" onclick="toggleSession()" class="bg-indigo-600 text-white font-800 py-4 rounded-2xl shadow-lg">Start Session</button>
+                    <button onclick="manualResetAndExport()" class="bg-rose-50 text-rose-600 border border-rose-100 font-800 py-4 rounded-2xl">Reset & Save</button>
+                </div>
             </div>
-            
-            <div class="bg-white p-6 rounded-3xl border text-left">
-                <h3 class="font-800 text-sm mb-4 flex justify-between">Present Today <span id="count" class="text-indigo-600">0</span></h3>
-                <div id="teacherLogs" class="space-y-2"></div>
-            </div>
+            <div id="teacherLogs" class="space-y-2 text-left"></div>
         </section>
 
     </main>
@@ -73,6 +72,10 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, query, where, onSnapshot, addDoc, serverTimestamp, deleteDoc, getDocs, writeBatch } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // --- CUSTOMIZABLE CONSTANTS ---
+        const CODE_COOLDOWN = 30; // Seconds before code changes (Increase for slow typers)
+        const CYCLE_LIMIT = 20 * 60 * 60 * 1000; // 20 Hours session limit
 
         const firebaseConfig = {
             apiKey: "AIzaSyDUMh49zJsFL_FUGLHdi7I7kBqm7H4gsUA",
@@ -90,9 +93,8 @@
 
         let userData = null;
         let rotationTimer = null;
-        const CYCLE_TIME = 20 * 60 * 60 * 1000; // 20 Hours
 
-        // AUTH
+        // AUTH Logic
         document.getElementById('googleBtn').onclick = () => signInWithPopup(auth, provider);
         window.logout = () => signOut(auth).then(() => location.reload());
 
@@ -123,105 +125,75 @@
             else { switchView('studentView'); initStudent(); }
         }
 
-        // --- TEACHER LOGIC ---
+        // TEACHER ENGINE
         window.toggleSession = async () => {
+            const btn = document.getElementById('sessionBtn');
             const ref = doc(db, "sessions", "LIVE_ROOM");
-            const snap = await getDoc(ref);
             
-            // Check if 20h cycle is up
-            if (snap.exists() && snap.data().startTime) {
-                const elapsed = Date.now() - snap.data().startTime.toMillis();
-                if (elapsed > CYCLE_TIME) {
-                    await manualResetAndExport();
-                    return;
-                }
-            }
+            if (btn.innerText.includes("Start")) {
+                btn.innerText = "Running...";
+                document.getElementById('timerWrapper').classList.remove('hidden');
+                let r = CODE_COOLDOWN;
 
-            document.getElementById('expiryLabel').classList.remove('hidden');
-            let r = 10;
-            rotationTimer = setInterval(async () => {
-                if (r >= 10) {
-                    const code = Math.floor(100000 + Math.random() * 900000).toString();
-                    await setDoc(ref, { 
-                        code, 
-                        active: true, 
-                        startTime: snap.exists() ? snap.data().startTime : serverTimestamp() 
-                    }, { merge: true });
-                    document.getElementById('displayCode').innerText = code;
-                    document.getElementById('displayCode').classList.replace('text-slate-200', 'text-indigo-600');
-                    r = 0;
-                }
-                r++;
-            }, 1000);
+                rotationTimer = setInterval(async () => {
+                    if (r >= CODE_COOLDOWN) {
+                        const code = Math.floor(100000 + Math.random() * 900000).toString();
+                        await setDoc(ref, { code, active: true, startTime: serverTimestamp() }, { merge: true });
+                        document.getElementById('displayCode').innerText = code;
+                        document.getElementById('displayCode').classList.replace('text-slate-200', 'text-indigo-600');
+                        r = 0;
+                    }
+                    r++;
+                    let remaining = CODE_COOLDOWN - r;
+                    document.getElementById('secondsLabel').innerText = remaining + "s";
+                    document.getElementById('timerBar').style.width = (remaining / CODE_COOLDOWN * 100) + "%";
+                }, 1000);
+            }
         };
 
         window.manualResetAndExport = async () => {
-            if (!confirm("Export attendance to .txt and reset everything?")) return;
-
+            if (!confirm("This will save the current list to a file and CLEAR the database. Proceed?")) return;
             const q = query(collection(db, "attendance"), where("date", "==", new Date().toDateString()));
             const snap = await getDocs(q);
-            
-            let textContent = `Attendance Report - ${new Date().toLocaleString()}\n`;
-            textContent += `------------------------------------------\n`;
-            
+            let log = `Attendance Report: ${new Date().toLocaleString()}\n\n`;
             const batch = writeBatch(db);
-            snap.forEach(doc => {
-                textContent += `${doc.data().name} | ${doc.data().email || 'No Email'}\n`;
-                batch.delete(doc.ref);
+            snap.forEach(d => {
+                log += `- ${d.data().name}\n`;
+                batch.delete(d.ref);
             });
-
-            // Download File
-            const blob = new Blob([textContent], { type: 'text/plain' });
+            const blob = new Blob([log], { type: 'text/plain' });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
-            link.download = `Attendance_${new Date().toISOString().split('T')[0]}.txt`;
+            link.download = `attendance_${new Date().toLocaleDateString()}.txt`;
             link.click();
-
-            // Clear database session
             await batch.commit();
             await deleteDoc(doc(db, "sessions", "LIVE_ROOM"));
-            alert("Report saved and database reset.");
             location.reload();
         };
 
         function initTeacher() {
             onSnapshot(collection(db, "attendance"), (snap) => {
-                document.getElementById('count').innerText = snap.size;
                 document.getElementById('teacherLogs').innerHTML = snap.docs
-                    .map(d => `<div class="p-2 border-b text-xs font-bold text-slate-600">✓ ${d.data().name}</div>`).join('');
+                    .map(d => `<div class="p-2 border-b text-xs font-bold">✓ ${d.data().name}</div>`).join('');
             });
         }
 
-        // --- STUDENT LOGIC ---
+        // STUDENT ENGINE
         window.submitAttendance = async () => {
             const entered = document.getElementById('codeEntry').value.trim();
             const snap = await getDoc(doc(db, "sessions", "LIVE_ROOM"));
-            
-            if (!snap.exists() || !snap.data().active) return alert("No active class session!");
-
-            if (snap.data().code === entered) {
-                // Check duplicate
+            if (snap.exists() && snap.data().active && snap.data().code === entered) {
                 const q = query(collection(db, "attendance"), where("uid", "==", userData.uid));
                 const existing = await getDocs(q);
-                if (!existing.empty) return alert("You are already marked present.");
-
-                await addDoc(collection(db, "attendance"), { 
-                    uid: userData.uid, 
-                    name: userData.name, 
-                    date: new Date().toDateString(),
-                    timestamp: serverTimestamp() 
-                });
-                alert("Attendance recorded! ✓");
-            } else { alert("Code incorrect or expired."); }
+                if (!existing.empty) return alert("Already marked!");
+                await addDoc(collection(db, "attendance"), { uid: userData.uid, name: userData.name, date: new Date().toDateString() });
+                alert("Attendance Marked! ✓");
+            } else { alert("Invalid or Expired Code!"); }
         };
 
         function initStudent() {
             onSnapshot(query(collection(db, "attendance"), where("uid", "==", userData.uid)), (snap) => {
-                document.getElementById('studentHistory').innerHTML = snap.docs.map(d => `
-                    <div class="bg-white p-4 border rounded-2xl flex justify-between text-xs font-bold shadow-sm">
-                        <span>Class Session</span>
-                        <span class="text-indigo-600">PRESENT</span>
-                    </div>`).join('');
+                document.getElementById('studentHistory').innerHTML = snap.docs.map(d => `<div class="bg-white p-4 rounded-xl border flex justify-between text-xs font-bold shadow-sm"><span>Class Session</span><span class="text-indigo-600">PRESENT</span></div>`).join('');
             });
         }
     </script>
