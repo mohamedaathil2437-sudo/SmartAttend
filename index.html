@@ -3,102 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartAttend | Pro Dashboard</title>
+    <title>SmartAttend Pro | Live Session</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f1f5f9; }
         .view-section { display: none; }
-        .view-section.active { display: block; animation: fadeIn 0.4s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .code-input { letter-spacing: 0.5em; font-weight: 900; }
+        .view-section.active { display: block; animation: zoomIn 0.3s ease-out; }
+        @keyframes zoomIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        .code-font { font-family: 'Courier New', monospace; letter-spacing: 0.4em; }
     </style>
 </head>
-<body>
+<body class="min-h-screen">
 
-    <nav class="bg-white border-b border-slate-200 px-6 py-4 flex justify-between items-center sticky top-0 z-50">
+    <nav class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-slate-200 px-6 py-4 flex justify-between items-center">
         <div class="flex items-center gap-2">
-            <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold">S</div>
-            <span class="text-xl font-800 tracking-tight">SmartAttend</span>
+            <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-indigo-200">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7" /></svg>
+            </div>
+            <span class="text-xl font-800 tracking-tighter">SmartAttend<span class="text-indigo-600">.</span></span>
         </div>
-        <div id="navActions" class="hidden">
-            <button onclick="logout()" class="text-sm font-bold text-slate-400 hover:text-red-500 transition">Logout</button>
+        <div id="navInfo" class="hidden flex items-center gap-4">
+            <span id="badge" class="text-[10px] font-black uppercase bg-slate-100 px-2 py-1 rounded-md text-slate-500">User</span>
+            <button onclick="logout()" class="text-slate-400 hover:text-red-500 transition"><svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg></button>
         </div>
     </nav>
 
     <main class="max-w-4xl mx-auto p-6">
 
         <section id="loginView" class="view-section active mt-20 text-center">
-            <div class="bg-white p-10 rounded-[2rem] shadow-xl border border-slate-100 max-w-md mx-auto">
-                <h2 class="text-3xl font-800 mb-6">Welcome</h2>
-                <button id="googleBtn" class="w-full flex items-center justify-center gap-3 bg-white border-2 border-slate-100 py-4 rounded-xl font-bold hover:bg-slate-50 transition-all active:scale-95">
-                    <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8c-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4C12.955 4 4 12.955 4 24s8.955 20 20 20s20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"/><path fill="#FF3D00" d="m6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4C16.318 4 9.656 8.337 6.306 14.691z"/><path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238A11.91 11.91 0 0 1 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z"/><path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303a12.04 12.04 0 0 1-4.087 5.571l.003-.002l6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z"/></svg>
-                    Sign in with Google
+            <div class="bg-white p-12 rounded-[2.5rem] shadow-2xl shadow-slate-200 max-w-md mx-auto border border-slate-100">
+                <h1 class="text-4xl font-800 mb-2 tracking-tight">Get Started</h1>
+                <p class="text-slate-500 mb-10 font-medium">Professional Attendance Management</p>
+                <button id="googleBtn" class="w-full flex items-center justify-center gap-4 bg-white border-2 border-slate-100 py-4 rounded-2xl font-bold hover:bg-slate-50 hover:border-indigo-200 transition-all active:scale-95 shadow-sm">
+                    <svg width="24" height="24" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8c-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4C12.955 4 4 12.955 4 24s8.955 20 20 20s20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"/><path fill="#FF3D00" d="m6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4C16.318 4 9.656 8.337 6.306 14.691z"/><path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238A11.91 11.91 0 0 1 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z"/><path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303a12.04 12.04 0 0 1-4.087 5.571l.003-.002l6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z"/></svg>
+                    Continue with Google
                 </button>
             </div>
         </section>
 
         <section id="roleView" class="view-section mt-10">
-            <h2 class="text-2xl font-800 text-center mb-8">Choose Your Role</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <button onclick="assignRole('student')" class="bg-white p-8 rounded-2xl border-2 border-transparent hover:border-indigo-600 shadow-sm transition-all group">
-                    <div class="text-4xl mb-4">🎓</div>
-                    <div class="font-800 text-lg">Student</div>
-                    <p class="text-slate-400 text-xs mt-2">I want to mark my attendance</p>
-                </button>
-                <button onclick="assignRole('teacher')" class="bg-white p-8 rounded-2xl border-2 border-transparent hover:border-rose-500 shadow-sm transition-all group">
-                    <div class="text-4xl mb-4">👨‍🏫</div>
-                    <div class="font-800 text-lg">Teacher</div>
-                    <p class="text-slate-400 text-xs mt-2">I want to start a session (PIN required)</p>
-                </button>
-                <button onclick="assignRole('admin')" class="bg-white p-8 rounded-2xl border-2 border-transparent hover:border-purple-600 shadow-sm transition-all group">
-                    <div class="text-4xl mb-4">🛡️</div>
-                    <div class="font-800 text-lg">Admin</div>
-                    <p class="text-slate-400 text-xs mt-2">System management (PIN required)</p>
-                </button>
+            <h2 class="text-3xl font-800 text-center mb-2">Identify Yourself</h2>
+            <p class="text-center text-slate-500 mb-10 font-medium">This setting is permanent for this account.</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                <div onclick="selectRole('student')" class="bg-white p-8 rounded-[2.5rem] border-2 border-transparent hover:border-indigo-600 shadow-sm cursor-pointer transition-all group text-center">
+                    <div class="text-5xl mb-4 group-hover:scale-110 transition">🎓</div>
+                    <h3 class="font-800 text-xl">Student</h3>
+                    <p class="text-slate-400 text-sm mt-2 font-medium">Mark attendance & view records.</p>
+                </div>
+                <div onclick="selectRole('teacher')" class="bg-white p-8 rounded-[2.5rem] border-2 border-transparent hover:border-rose-500 shadow-sm cursor-pointer transition-all group text-center">
+                    <div class="text-5xl mb-4 group-hover:scale-110 transition">👨‍🏫</div>
+                    <h3 class="font-800 text-xl">Teacher</h3>
+                    <p class="text-slate-400 text-sm mt-2 font-medium">Control live sessions & codes.</p>
+                </div>
+                <div onclick="selectRole('admin')" class="bg-white p-8 rounded-[2.5rem] border-2 border-transparent hover:border-purple-600 shadow-sm cursor-pointer transition-all group text-center">
+                    <div class="text-5xl mb-4 group-hover:scale-110 transition">🛡️</div>
+                    <h3 class="font-800 text-xl">Admin</h3>
+                    <p class="text-slate-400 text-sm mt-2 font-medium">Full system access & reports.</p>
+                </div>
             </div>
         </section>
 
         <section id="studentView" class="view-section space-y-6">
-            <div class="bg-indigo-600 p-8 rounded-[2rem] text-white shadow-xl shadow-indigo-100">
-                <h3 class="text-xl font-800 mb-4">Live Check-in</h3>
+            <div class="bg-indigo-600 p-10 rounded-[3rem] text-white shadow-2xl shadow-indigo-200">
+                <h2 class="text-3xl font-800 mb-6 tracking-tight">Enter Live Code</h2>
                 <div class="flex flex-col sm:flex-row gap-4">
-                    <input type="text" id="codeEntry" maxlength="6" class="flex-1 p-4 rounded-xl text-slate-900 text-3xl text-center code-input outline-none" placeholder="000000">
-                    <button onclick="submitAttendance()" class="bg-white text-indigo-600 font-800 px-8 py-4 rounded-xl hover:bg-slate-50 transition">Submit Code</button>
+                    <input type="text" id="codeEntry" maxlength="6" class="flex-1 p-6 rounded-2xl text-slate-900 text-5xl font-black text-center code-font outline-none shadow-inner" placeholder="000000">
+                    <button onclick="submitAttendance()" class="bg-white text-indigo-600 font-800 px-12 py-6 rounded-2xl hover:bg-slate-50 transition-all text-xl">Check-in</button>
                 </div>
-                <p class="mt-4 text-indigo-100 text-xs font-medium italic">Check the teacher's screen for the rotating 6-digit code.</p>
+                <p class="mt-6 text-indigo-100 font-medium italic opacity-80">Codes refresh every 10 seconds. Stay synchronized!</p>
             </div>
             
-            <div class="bg-white p-6 rounded-2xl border border-slate-100">
-                <div class="flex justify-between items-center mb-4">
-                    <h4 class="font-800">My Attendance Percentage</h4>
-                    <span id="pctDisplay" class="text-indigo-600 font-900 text-xl">0%</span>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm">
+                    <h4 class="font-800 text-lg mb-4 text-slate-800">Your Logs</h4>
+                    <div id="studentHistory" class="space-y-3"></div>
                 </div>
-                <div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden">
-                    <div id="pctBar" class="h-full bg-indigo-600 transition-all duration-500" style="width: 0%"></div>
+                <div class="bg-white p-10 rounded-[2.5rem] border border-slate-100 shadow-sm text-center">
+                    <h4 class="font-800 text-slate-400 text-xs uppercase tracking-widest mb-6">Attendance Rate</h4>
+                    <div class="text-7xl font-900 text-indigo-600 mb-4" id="pctText">0%</div>
+                    <div class="w-full bg-slate-100 h-4 rounded-full overflow-hidden">
+                        <div id="pctBar" class="h-full bg-indigo-600 transition-all duration-1000" style="width: 0%"></div>
+                    </div>
                 </div>
             </div>
-
-            <div id="historyList" class="space-y-3">
-                </div>
         </section>
 
-        <section id="teacherView" class="view-section text-center space-y-6">
-            <div class="bg-white p-10 rounded-[2rem] border border-slate-100 shadow-sm">
-                <h3 class="text-slate-400 text-xs font-black uppercase tracking-widest mb-4">Class Attendance Code</h3>
-                <div id="liveCode" class="text-8xl font-900 tracking-tighter text-slate-200 mb-8">------</div>
+        <section id="teacherView" class="view-section text-center space-y-8">
+            <div class="bg-white p-12 rounded-[3rem] border border-slate-100 shadow-sm relative overflow-hidden">
+                <div id="liveIndicator" class="hidden absolute top-8 left-1/2 -translate-x-1/2 flex items-center gap-2 px-4 py-1.5 bg-rose-100 text-rose-600 rounded-full text-[10px] font-black uppercase tracking-widest animate-pulse">
+                    <span class="w-2 h-2 bg-rose-600 rounded-full"></span> Session Live
+                </div>
+                <h3 class="text-slate-400 text-xs font-black uppercase tracking-widest mb-10 mt-6">Display this code to students</h3>
+                <div id="liveDisplay" class="text-9xl font-900 code-font text-slate-200 tracking-tighter mb-10">------</div>
                 
-                <div id="sessionStats" class="hidden mb-8">
-                    <p class="text-rose-500 font-bold text-sm animate-pulse mb-2">LIVE SESSION RUNNING</p>
-                    <div class="max-w-xs mx-auto flex justify-between text-[10px] font-black text-slate-400">
-                        <span>New Code in: <b id="rotTimer">10s</b></span>
-                        <span>Ends in: <b id="sessionTimer">02:00</b></span>
+                <div id="teacherTimers" class="hidden max-w-sm mx-auto mb-10">
+                    <div class="flex justify-between text-[11px] font-black text-slate-400 mb-2">
+                        <span>New Code: <b id="rotTimer" class="text-slate-900">10s</b></span>
+                        <span>Session Ends: <b id="endTimer" class="text-slate-900">02:00</b></span>
+                    </div>
+                    <div class="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                        <div id="rotBar" class="h-full bg-indigo-600 w-0 transition-all duration-1000 linear"></div>
                     </div>
                 </div>
 
-                <button id="sessionBtn" onclick="handleTeacherSession()" class="bg-indigo-600 text-white font-800 px-12 py-4 rounded-xl hover:bg-indigo-700 transition">Start Attendance</button>
+                <button id="sessionBtn" onclick="toggleTeacherSession()" class="bg-indigo-600 text-white font-800 px-16 py-5 rounded-2xl hover:bg-indigo-700 transition shadow-xl shadow-indigo-100 text-lg">Start Session</button>
             </div>
-            <div id="teacherLogs" class="grid grid-cols-2 md:grid-cols-4 gap-3"></div>
+            <div class="bg-white p-8 rounded-[2.5rem] border border-slate-100">
+                <h4 class="font-800 text-left mb-6 flex justify-between">Checked-in Students <span id="teacherCount" class="bg-indigo-50 text-indigo-600 px-3 py-1 rounded-lg text-xs">0</span></h4>
+                <div id="teacherLogs" class="grid grid-cols-2 sm:grid-cols-4 gap-4"></div>
+            </div>
         </section>
 
     </main>
@@ -106,9 +120,8 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, query, where, onSnapshot, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, query, where, onSnapshot, addDoc, serverTimestamp, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // CONFIG (Replace with your actual Firebase config)
         const firebaseConfig = {
             apiKey: "AIzaSyDUMh49zJsFL_FUGLHdi7I7kBqm7H4gsUA",
             authDomain: "smart-attend-d0e2d.firebaseapp.com",
@@ -123,118 +136,138 @@
         const db = getFirestore(app);
         const provider = new GoogleAuthProvider();
 
-        let userProfile = null;
-        let rotationInterval = null;
+        let userData = null;
+        let mainTimer = null;
 
-        // AUTH TRIGGER
-        document.getElementById('googleBtn').addEventListener('click', () => {
-            signInWithPopup(auth, provider).catch(err => alert("Error: Use a different browser or enable popups."));
-        });
-
+        // AUTH CORE
+        document.getElementById('googleBtn').onclick = () => signInWithPopup(auth, provider);
         window.logout = () => signOut(auth).then(() => location.reload());
 
-        // ROUTING LOGIC
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                const userDoc = await getDoc(doc(db, "users", user.uid));
-                if (userDoc.exists()) {
-                    userProfile = userDoc.data();
-                    renderView();
+                const docRef = doc(db, "users", user.uid);
+                const docSnap = await getDoc(docRef);
+                
+                if (docSnap.exists()) {
+                    userData = docSnap.data();
+                    routeUser();
                 } else {
-                    switchView('roleView');
+                    setView('roleView');
                 }
-                document.getElementById('navActions').classList.remove('hidden');
             } else {
-                switchView('loginView');
+                setView('loginView');
             }
         });
 
-        function switchView(id) {
-            document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
+        function setView(id) {
+            document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
         }
 
-        window.assignRole = async (role) => {
-            if (role !== 'student') {
+        window.selectRole = async (role) => {
+            // PIN PROTECTION
+            if (role === 'teacher' || role === 'admin') {
                 const pin = prompt("Enter Security PIN (431298):");
-                if (pin !== '431298') return alert("Access Denied");
+                if (pin !== '431298') return alert("Access Denied: Wrong PIN.");
             }
-            const data = { name: auth.currentUser.displayName, email: auth.currentUser.email, role, createdAt: serverTimestamp() };
-            await setDoc(doc(db, "users", auth.currentUser.uid), data);
-            userProfile = data;
-            renderView();
+            
+            const profile = { 
+                uid: auth.currentUser.uid, 
+                name: auth.currentUser.displayName, 
+                email: auth.currentUser.email, 
+                role: role, 
+                createdAt: serverTimestamp() 
+            };
+            
+            await setDoc(doc(db, "users", auth.currentUser.uid), profile);
+            userData = profile;
+            routeUser();
         };
 
-        function renderView() {
-            if (userProfile.role === 'teacher') { switchView('teacherView'); setupTeacherListener(); }
-            else if (userProfile.role === 'admin') { alert("Admin Panel Loaded"); }
-            else { switchView('studentView'); setupStudentListener(); }
+        function routeUser() {
+            document.getElementById('navInfo').classList.remove('hidden');
+            document.getElementById('badge').innerText = userData.role;
+            if (userData.role === 'teacher') { setView('teacherView'); initTeacher(); }
+            else if (userData.role === 'admin') { alert("Admin View Loaded"); }
+            else { setView('studentView'); initStudent(); }
         }
 
-        // TEACHER CODE GENERATOR
-        window.handleTeacherSession = async () => {
+        // TEACHER ENGINE
+        window.toggleTeacherSession = async () => {
             const btn = document.getElementById('sessionBtn');
-            const sessionRef = doc(db, "sessions", "CURRENT_CLASS");
-            
-            if (btn.innerText.includes("Start")) {
-                let timeLeft = 120; let rot = 10;
-                btn.innerText = "Stop Session";
-                document.getElementById('sessionStats').classList.remove('hidden');
-                document.getElementById('liveCode').classList.replace('text-slate-200', 'text-indigo-600');
+            const sessionRef = doc(db, "sessions", "LIVE_ROOM");
 
-                rotationInterval = setInterval(async () => {
-                    if (rot >= 10) {
-                        const code = Math.floor(100000 + Math.random() * 900000).toString();
-                        await setDoc(sessionRef, { code, active: true });
-                        document.getElementById('liveCode').innerText = code;
-                        rot = 0;
+            if (btn.innerText.includes("Start")) {
+                let sLeft = 120, rLeft = 10;
+                btn.innerText = "Terminate Session";
+                btn.className = btn.className.replace('indigo', 'rose');
+                document.getElementById('liveIndicator').classList.remove('hidden');
+                document.getElementById('teacherTimers').classList.remove('hidden');
+                document.getElementById('liveDisplay').classList.replace('text-slate-200', 'text-indigo-600');
+
+                mainTimer = setInterval(async () => {
+                    if (rLeft >= 10) {
+                        const newCode = Math.floor(100000 + Math.random() * 900000).toString();
+                        await setDoc(sessionRef, { code: newCode, active: true });
+                        document.getElementById('liveDisplay').innerText = newCode;
+                        rLeft = 0;
                     }
-                    rot++; timeLeft--;
-                    document.getElementById('rotTimer').innerText = (10 - rot) + "s";
-                    document.getElementById('sessionTimer').innerText = Math.floor(timeLeft/60) + ":" + (timeLeft%60).toString().padStart(2, '0');
-                    if (timeLeft <= 0) handleTeacherSession();
+                    rLeft++; sLeft--;
+                    document.getElementById('rotBar').style.width = (rLeft * 10) + "%";
+                    document.getElementById('rotTimer').innerText = (10 - rLeft) + "s";
+                    let m = Math.floor(sLeft/60), s = sLeft%60;
+                    document.getElementById('endTimer').innerText = `${m}:${s < 10 ? '0'+s : s}`;
+                    if (sLeft <= 0) toggleTeacherSession();
                 }, 1000);
             } else {
-                clearInterval(rotationInterval);
+                clearInterval(mainTimer);
                 await updateDoc(sessionRef, { active: false });
                 location.reload();
             }
         };
 
-        function setupTeacherListener() {
+        function initTeacher() {
             onSnapshot(query(collection(db, "attendance"), where("date", "==", new Date().toDateString())), (snap) => {
-                document.getElementById('teacherLogs').innerHTML = snap.docs.map(d => `<div class="bg-slate-100 p-2 rounded font-bold text-xs text-center">${d.data().name}</div>`).join('');
+                document.getElementById('teacherCount').innerText = snap.size;
+                document.getElementById('teacherLogs').innerHTML = snap.docs.map(d => `<div class="bg-indigo-50 text-indigo-700 p-3 rounded-2xl font-bold text-xs text-center border border-indigo-100">${d.data().name.split(' ')[0]}</div>`).join('');
             });
         }
 
-        // STUDENT INPUT LOGIC
+        // STUDENT ENGINE
         window.submitAttendance = async () => {
             const code = document.getElementById('codeEntry').value;
-            const snap = await getDoc(doc(db, "sessions", "CURRENT_CLASS"));
+            const snap = await getDoc(doc(db, "sessions", "LIVE_ROOM"));
+            
             if (snap.exists() && snap.data().active && snap.data().code === code) {
+                // Check if already marked
+                const q = query(collection(db, "attendance"), where("uid", "==", userData.uid), where("date", "==", new Date().toDateString()));
+                const existing = await getDocs(q);
+                if (!existing.empty) return alert("Already marked today!");
+
                 await addDoc(collection(db, "attendance"), { 
-                    uid: auth.currentUser.uid, 
-                    name: userProfile.name, 
-                    date: new Date().toDateString(),
+                    uid: userData.uid, 
+                    name: userData.name, 
+                    date: new Date().toDateString(), 
                     timestamp: serverTimestamp() 
                 });
-                alert("Attendance Marked!");
+                alert("Attendance Confirmed! ✓");
                 document.getElementById('codeEntry').value = "";
             } else {
-                alert("Invalid or Expired Code!");
+                alert("Invalid or expired code. Wait for the teacher to refresh.");
             }
         };
 
-        function setupStudentListener() {
-            onSnapshot(query(collection(db, "attendance"), where("uid", "==", auth.currentUser.uid)), (snap) => {
+        function initStudent() {
+            onSnapshot(query(collection(db, "attendance"), where("uid", "==", userData.uid)), (snap) => {
                 const attended = snap.size;
-                const pct = Math.min((attended / 10) * 100, 100); // 10 classes total
-                document.getElementById('pctDisplay').innerText = pct + "%";
+                const total = 10; 
+                const pct = Math.min((attended / total) * 100, 100);
+                document.getElementById('pctText').innerText = pct + "%";
                 document.getElementById('pctBar').style.width = pct + "%";
-                document.getElementById('historyList').innerHTML = snap.docs.map(d => `
-                    <div class="bg-white p-4 rounded-xl border flex justify-between">
-                        <span class="font-bold">Lecture Session</span>
-                        <span class="text-indigo-600 text-xs font-black">PRESENT</span>
+                document.getElementById('studentHistory').innerHTML = snap.docs.map(d => `
+                    <div class="flex justify-between items-center p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                        <span class="font-bold text-sm text-slate-700">${d.data().date}</span>
+                        <span class="bg-emerald-100 text-emerald-700 text-[10px] font-black px-2 py-1 rounded">PRESENT</span>
                     </div>`).join('');
             });
         }
