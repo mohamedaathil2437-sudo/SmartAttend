@@ -3,118 +3,180 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartAttend | Professional College Project</title>
+    <title>SmartAttend | Role-Based Onboarding</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
         .glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); }
         .code-font { font-family: 'Courier New', Courier, monospace; letter-spacing: 0.5rem; }
-        .pulse-live { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        .pulse-live { animation: pulse 2s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+        /* Simple hide class for views */
+        .view-section { display: none; }
+        .view-section.active { display: block; animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900 antialiased min-h-screen">
+<body class="bg-slate-50 text-slate-900 min-h-screen">
 
     <nav class="glass sticky top-0 z-[60] border-b border-slate-200 px-6 py-4 flex justify-between items-center">
-        <div class="flex items-center gap-2">
-            <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-indigo-200">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor font-bold">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
             </div>
-            <span class="text-xl font-800 tracking-tight italic">SmartAttend</span>
+            <span class="text-xl font-800 italic tracking-tight">SmartAttend</span>
         </div>
         <div id="navActions" class="hidden flex items-center gap-4">
-            <span id="userBadge" class="text-xs font-bold px-3 py-1 bg-indigo-100 rounded-full text-indigo-600 uppercase tracking-widest">User</span>
-            <button onclick="logout()" class="text-sm font-semibold text-red-500 hover:bg-red-50 px-4 py-2 rounded-lg transition">Logout</button>
+            <span id="roleBadge" class="text-xs font-black px-3 py-1 bg-slate-200 rounded-lg text-slate-600 uppercase tracking-widest">User</span>
+            <button onclick="logout()" class="text-sm font-bold text-slate-500 hover:text-red-500 transition">Sign Out</button>
         </div>
     </nav>
 
     <main class="max-w-5xl mx-auto p-6">
         
-        <section id="loginView" class="mt-16 max-w-md mx-auto">
-            <div class="bg-white p-10 rounded-[2.5rem] shadow-2xl shadow-slate-200 border border-slate-100">
-                <h2 class="text-3xl font-800 mb-2">Welcome</h2>
-                <p class="text-slate-500 mb-8 font-medium text-sm">Sign in to your college account</p>
-                <div class="space-y-4">
-                    <input type="email" id="email" placeholder="Email Address" class="w-full p-4 rounded-2xl bg-slate-50 border-2 border-transparent focus:border-indigo-600 focus:bg-white outline-none transition-all">
-                    <input type="password" id="password" placeholder="Password" class="w-full p-4 rounded-2xl bg-slate-50 border-2 border-transparent focus:border-indigo-600 focus:bg-white outline-none transition-all">
-                    <button onclick="login()" id="loginBtn" class="w-full bg-indigo-600 text-white font-bold py-4 rounded-2xl hover:bg-indigo-700 shadow-xl shadow-indigo-100 transition-all active:scale-95">Sign In</button>
+        <section id="loginView" class="view-section active mt-20 max-w-sm mx-auto text-center">
+            <div class="bg-white p-10 rounded-[2.5rem] shadow-xl border border-slate-100">
+                <h2 class="text-3xl font-800 mb-6">Welcome</h2>
+                <button onclick="loginWithGoogle()" class="w-full flex items-center justify-center gap-3 bg-white border-2 border-slate-200 py-4 rounded-2xl font-bold hover:bg-slate-50 transition active:scale-95">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/0/google.svg" width="20" alt="Google">
+                    Continue with Google
+                </button>
+                <p class="mt-6 text-xs text-slate-400 font-medium">Use your college email address.</p>
+            </div>
+        </section>
+
+        <section id="roleView" class="view-section mt-10 max-w-2xl mx-auto text-center">
+            <h2 class="text-3xl font-800 mb-2">Complete your profile</h2>
+            <p class="text-slate-500 mb-8 font-medium">Select your account type to continue.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <button onclick="assignRole('student')" class="bg-white p-8 rounded-[2rem] border-2 border-transparent hover:border-indigo-600 shadow-sm hover:shadow-xl transition-all group">
+                    <div class="text-4xl mb-4 group-hover:scale-110 transition">🎓</div>
+                    <h3 class="font-800 text-lg">Student</h3>
+                    <p class="text-xs text-slate-400 mt-2">Join classes & mark attendance</p>
+                </button>
+                
+                <button onclick="assignRole('teacher')" class="bg-white p-8 rounded-[2rem] border-2 border-transparent hover:border-rose-500 shadow-sm hover:shadow-xl transition-all group">
+                    <div class="text-4xl mb-4 group-hover:scale-110 transition">👨‍🏫</div>
+                    <h3 class="font-800 text-lg">Teacher</h3>
+                    <p class="text-xs text-slate-400 mt-2">Requires PIN</p>
+                </button>
+
+                <button onclick="assignRole('admin')" class="bg-white p-8 rounded-[2rem] border-2 border-transparent hover:border-purple-600 shadow-sm hover:shadow-xl transition-all group">
+                    <div class="text-4xl mb-4 group-hover:scale-110 transition">🛡️</div>
+                    <h3 class="font-800 text-lg">Admin</h3>
+                    <p class="text-xs text-slate-400 mt-2">Requires PIN</p>
+                </button>
+            </div>
+        </section>
+
+        <section id="studentView" class="view-section space-y-6">
+            <div class="bg-indigo-600 p-8 md:p-12 rounded-[2.5rem] text-white shadow-2xl shadow-indigo-200">
+                <h2 class="text-3xl font-800 mb-3">Live Check-in</h2>
+                <p class="opacity-80 mb-8 font-medium">Enter the 6-digit code displayed on the classroom screen.</p>
+                <div class="flex flex-col md:flex-row gap-4 max-w-lg">
+                    <input type="text" id="codeEntry" maxlength="6" class="flex-1 p-5 rounded-2xl text-slate-900 text-3xl font-black text-center tracking-[0.5em] outline-none placeholder:text-slate-300" placeholder="000000">
+                    <button onclick="submitCode()" class="bg-white text-indigo-600 font-800 px-8 py-5 rounded-2xl hover:scale-105 transition-all">Submit</button>
+                </div>
+            </div>
+            
+            <div class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm">
+                <h3 class="font-800 text-xl mb-6">My Attendance History</h3>
+                <div id="studentHistory" class="space-y-3">
+                    <p class="text-slate-400 italic text-sm">Loading records...</p>
                 </div>
             </div>
         </section>
 
-        <section id="teacherView" class="hidden space-y-8">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div class="lg:col-span-2 bg-white p-10 rounded-[2.5rem] shadow-sm border border-slate-200">
-                    <div class="flex justify-between items-start mb-8">
-                        <div>
-                            <h3 class="text-indigo-600 font-bold text-sm uppercase tracking-widest">Active Class</h3>
-                            <h2 class="text-3xl font-800">Advanced Algorithms</h2>
-                        </div>
-                        <div id="liveIndicator" class="hidden px-4 py-1 bg-rose-100 text-rose-600 rounded-full text-xs font-bold pulse-live">LIVE SESSION</div>
+        <section id="teacherView" class="view-section space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 bg-white p-8 md:p-10 rounded-[2.5rem] shadow-sm border border-slate-100">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-800 text-slate-800">Class Session</h2>
+                        <div id="liveIndicator" class="hidden px-4 py-1.5 bg-rose-100 text-rose-600 rounded-full text-xs font-bold pulse-live">LIVE</div>
                     </div>
-
-                    <div class="relative overflow-hidden bg-slate-900 rounded-[2rem] p-12 text-center text-white">
-                        <p class="text-indigo-400 font-bold mb-4 uppercase tracking-[0.3em] text-xs">Current Attendance Code</p>
-                        <div id="mainDisplayCode" class="text-7xl font-black code-font mb-8">------</div>
-                        
+                    
+                    <div class="bg-slate-900 rounded-[2rem] p-12 text-center text-white relative overflow-hidden">
+                        <div id="mainDisplayCode" class="text-7xl md:text-8xl font-black code-font mb-6 tracking-tighter text-slate-300">------</div>
                         <div id="timerContainer" class="hidden">
-                            <div class="w-full h-2 bg-slate-800 rounded-full mb-2">
-                                <div id="timerBar" class="h-full bg-indigo-500 w-0 transition-all duration-1000 ease-linear"></div>
+                            <div class="w-full h-2 bg-slate-800 rounded-full mb-3">
+                                <div id="timerBar" class="h-full bg-indigo-500 w-0 transition-all duration-1000 ease-linear rounded-full"></div>
                             </div>
-                            <p class="text-xs text-slate-400 italic">Rotating in <span id="rotationSeconds">10</span>s</p>
+                            <p class="text-xs text-slate-400 font-bold uppercase tracking-widest">Rotating in <span id="rotSec" class="text-white">10</span>s</p>
                         </div>
                     </div>
 
-                    <div class="mt-8 flex gap-4">
-                        <button id="sessionToggle" onclick="handleSession()" class="flex-1 bg-indigo-600 text-white font-bold py-4 rounded-2xl hover:bg-indigo-700 transition">Start Session</button>
-                        <button onclick="openProjector()" class="bg-slate-100 text-slate-600 font-bold px-6 rounded-2xl hover:bg-slate-200 transition">📺 Project</button>
+                    <div class="mt-6 flex flex-col md:flex-row gap-4">
+                        <button id="sessionToggle" onclick="handleSession()" class="flex-1 bg-indigo-600 text-white font-bold py-4 rounded-2xl hover:bg-indigo-700 transition">Start 2-Min Session</button>
+                        <button onclick="openProjector()" class="bg-slate-100 text-slate-600 px-8 py-4 rounded-2xl font-bold hover:bg-slate-200 transition">📺 Projector</button>
                     </div>
                 </div>
 
-                <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-200">
-                    <h4 class="font-800 text-xl mb-6">Live Logs (<span id="liveCount">0</span>)</h4>
-                    <div id="logContainer" class="space-y-3 h-[350px] overflow-y-auto pr-2">
-                        <p class="text-slate-400 italic text-sm text-center mt-20">No entries yet</p>
+                <div class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm flex flex-col">
+                    <h3 class="font-800 text-xl mb-6 flex justify-between items-center">
+                        Joined Students
+                        <span id="liveCount" class="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-lg text-sm">0</span>
+                    </h3>
+                    <div id="logContainer" class="flex-1 overflow-y-auto space-y-3 pr-2 h-[300px]">
+                        <p class="text-slate-400 italic text-sm text-center mt-10">Waiting for session to start...</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="studentView" class="hidden space-y-6">
-            <div class="bg-indigo-600 p-10 rounded-[2.5rem] text-white shadow-2xl shadow-indigo-100">
-                <h2 class="text-3xl font-800 mb-2">Check-in</h2>
-                <p class="opacity-70 mb-8 font-medium">Enter the 6-digit code shown by the teacher.</p>
-                <div class="flex gap-4">
-                    <input type="text" id="codeEntry" maxlength="6" class="flex-1 p-5 rounded-2xl text-slate-900 text-4xl font-black tracking-[0.5em] outline-none text-center" placeholder="000000">
-                    <button onclick="submitCode()" class="bg-white text-indigo-600 font-800 px-8 rounded-2xl hover:bg-slate-100 transition-all">Submit</button>
+        <section id="adminView" class="view-section space-y-6">
+            <div class="bg-purple-600 p-8 rounded-[2.5rem] text-white shadow-xl shadow-purple-200 flex justify-between items-center">
+                <div>
+                    <h2 class="text-3xl font-800 mb-2">Admin Dashboard</h2>
+                    <p class="opacity-80 font-medium text-sm">Manage system users and view database records.</p>
+                </div>
+                <div class="text-5xl opacity-50">🛡️</div>
+            </div>
+
+            <div class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="font-800 text-xl">All Registered Users</h3>
+                    <button onclick="fetchAdminUsers()" class="text-sm font-bold text-indigo-600 bg-indigo-50 px-4 py-2 rounded-xl">↻ Refresh</button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-slate-50 text-slate-500">
+                            <tr>
+                                <th class="p-4 rounded-tl-xl">Name</th>
+                                <th class="p-4">Email</th>
+                                <th class="p-4">Role</th>
+                                <th class="p-4 rounded-tr-xl">Joined</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminUserTable" class="divide-y divide-slate-100">
+                            <tr><td colspan="4" class="p-4 text-center text-slate-400">Loading users...</td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-            <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-200">
-                <h4 class="font-800 text-xl mb-6">Attendance History</h4>
-                <div id="studentHistory" class="space-y-3"></div>
-            </div>
         </section>
+
     </main>
 
-    <div id="projectorOverlay" class="hidden fixed inset-0 bg-indigo-600 z-[100] flex flex-col items-center justify-center text-white p-10 text-center">
-        <button onclick="closeProjector()" class="absolute top-10 right-10 text-white/50 hover:text-white text-4xl">✕</button>
-        <p class="text-2xl font-bold opacity-60 uppercase tracking-[0.5em] mb-4 font-mono">CODE TO ENTER</p>
-        <div id="projectorCode" class="text-[18rem] font-black leading-none tracking-tighter mb-10 code-font">000000</div>
-        <div class="w-full max-w-4xl h-4 bg-indigo-900 rounded-full overflow-hidden">
-            <div id="projectorBar" class="h-full bg-white w-0 transition-all duration-1000 ease-linear"></div>
+    <div id="projectorOverlay" class="hidden fixed inset-0 bg-slate-900 z-[100] flex flex-col items-center justify-center text-white text-center p-10">
+        <button onclick="closeProjector()" class="absolute top-10 right-10 text-4xl opacity-50 hover:opacity-100 transition">✕</button>
+        <p class="text-2xl md:text-4xl font-bold text-indigo-400 uppercase tracking-[0.4em] mb-8">Enter Class Code</p>
+        <div id="projectorCode" class="text-[12rem] md:text-[18rem] font-black code-font leading-none tracking-tighter mb-12">000000</div>
+        
+        <div class="w-full max-w-4xl h-4 bg-slate-800 rounded-full overflow-hidden">
+            <div id="projectorBar" class="h-full bg-indigo-500 w-0 transition-all duration-1000 ease-linear rounded-full"></div>
         </div>
-        <p class="mt-10 text-2xl font-medium opacity-80">Remaining Time: <span id="sessionTimer">02:00</span></p>
+        <p class="mt-12 text-2xl font-medium opacity-60 font-mono">Session Timeout: <span id="sessionTimer">02:00</span></p>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, query, where, onSnapshot, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, query, where, onSnapshot, getDocs, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // YOUR FIREBASE CONFIG
         const firebaseConfig = {
             apiKey: "AIzaSyDUMh49zJsFL_FUGLHdi7I7kBqm7H4gsUA",
             authDomain: "smart-attend-d0e2d.firebaseapp.com",
@@ -127,65 +189,155 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
 
-        let activeCode = "";
-        let masterInterval = null;
         let userData = null;
+        let masterInterval = null;
 
-        window.login = async () => {
-            const email = document.getElementById('email').value;
-            const pass = document.getElementById('password').value;
-            try {
-                await signInWithEmailAndPassword(auth, email, pass);
-            } catch (e) { alert("Error: " + e.message); }
+        // UI Routing Helper
+        function showView(viewId) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+        }
+
+        // --- AUTH & ONBOARDING ---
+        window.loginWithGoogle = async () => {
+            try { await signInWithPopup(auth, provider); } 
+            catch (e) { alert("Login failed: " + e.message); }
         };
 
         window.logout = () => signOut(auth).then(() => location.reload());
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
+                // Check if user already exists in DB
                 const userDoc = await getDoc(doc(db, "users", user.uid));
+                
                 if (userDoc.exists()) {
+                    // User exists, route to dashboard
                     userData = userDoc.data();
-                    document.getElementById('loginView').classList.add('hidden');
-                    document.getElementById('navActions').classList.remove('hidden');
-                    document.getElementById('userBadge').innerText = userData.role;
-                    if (userData.role === 'teacher') {
-                        document.getElementById('teacherView').classList.remove('hidden');
-                        initTeacherSide();
-                    } else {
-                        document.getElementById('studentView').classList.remove('hidden');
-                        initStudentSide(user.uid);
-                    }
+                    routeUserDashboard(userData);
+                } else {
+                    // New user, ask for role
+                    showView('roleView');
                 }
+            } else {
+                showView('loginView');
             }
         });
 
+        // The PIN verification logic
+        window.assignRole = async (selectedRole) => {
+            if (selectedRole === 'teacher' || selectedRole === 'admin') {
+                const pin = prompt(`Enter the secure PIN to register as an ${selectedRole.toUpperCase()}:`);
+                if (pin !== '431298') {
+                    alert("Incorrect PIN. Access Denied.");
+                    return; // Stop execution
+                }
+            }
+
+            // Save user profile to Firestore
+            const newUser = {
+                name: auth.currentUser.displayName || "Unknown User",
+                email: auth.currentUser.email,
+                role: selectedRole,
+                createdAt: serverTimestamp()
+            };
+
+            await setDoc(doc(db, "users", auth.currentUser.uid), newUser);
+            
+            // Set local state and route
+            userData = newUser;
+            routeUserDashboard(userData);
+        };
+
+        function routeUserDashboard(userProfile) {
+            document.getElementById('navActions').classList.remove('hidden');
+            
+            const badge = document.getElementById('roleBadge');
+            badge.innerText = userProfile.role;
+            
+            // Style the badge based on role
+            badge.className = "text-xs font-black px-3 py-1 rounded-lg uppercase tracking-widest " + 
+                (userProfile.role === 'admin' ? "bg-purple-100 text-purple-700" : 
+                 userProfile.role === 'teacher' ? "bg-rose-100 text-rose-700" : 
+                 "bg-indigo-100 text-indigo-700");
+
+            if (userProfile.role === 'admin') {
+                showView('adminView');
+                window.fetchAdminUsers(); // Fetch table data
+            } else if (userProfile.role === 'teacher') {
+                showView('teacherView');
+                initTeacher();
+            } else {
+                showView('studentView');
+                initStudent(auth.currentUser.uid);
+            }
+        }
+
+        // --- ADMIN LOGIC ---
+        window.fetchAdminUsers = async () => {
+            const table = document.getElementById('adminUserTable');
+            table.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-slate-400">Fetching data...</td></tr>`;
+            
+            try {
+                const querySnapshot = await getDocs(collection(db, "users"));
+                let html = "";
+                querySnapshot.forEach((doc) => {
+                    const d = doc.data();
+                    const date = d.createdAt ? d.createdAt.toDate().toLocaleDateString() : "N/A";
+                    
+                    let roleStyle = d.role === 'admin' ? "text-purple-600 bg-purple-50" : 
+                                    d.role === 'teacher' ? "text-rose-600 bg-rose-50" : 
+                                    "text-slate-600 bg-slate-100";
+
+                    html += `
+                        <tr class="hover:bg-slate-50 transition">
+                            <td class="p-4 font-bold text-slate-800">${d.name}</td>
+                            <td class="p-4 text-slate-500">${d.email}</td>
+                            <td class="p-4"><span class="px-2 py-1 rounded text-[10px] font-black uppercase ${roleStyle}">${d.role}</span></td>
+                            <td class="p-4 text-slate-500 text-sm">${date}</td>
+                        </tr>
+                    `;
+                });
+                table.innerHTML = html;
+            } catch (error) {
+                table.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-red-500">Error loading users. Check Firestore rules.</td></tr>`;
+            }
+        };
+
+        // --- TEACHER LOGIC ---
         window.handleSession = async () => {
             const btn = document.getElementById('sessionToggle');
             const sessionRef = doc(db, "sessions", "CS101");
+            
             if (btn.innerText.includes("Start")) {
-                let sessionLeft = 120; let rotationLeft = 10;
-                btn.innerText = "Stop Session";
+                let sLeft = 120; let rLeft = 10;
+                btn.innerText = "End Session"; 
                 btn.classList.replace('bg-indigo-600', 'bg-rose-600');
                 document.getElementById('liveIndicator').classList.remove('hidden');
                 document.getElementById('timerContainer').classList.remove('hidden');
+                document.getElementById('mainDisplayCode').classList.remove('text-slate-300');
 
                 masterInterval = setInterval(async () => {
-                    if (rotationLeft >= 10) {
-                        activeCode = Math.floor(100000 + Math.random() * 900000).toString();
-                        await setDoc(sessionRef, { code: activeCode, active: true });
-                        document.getElementById('mainDisplayCode').innerText = activeCode;
-                        document.getElementById('projectorCode').innerText = activeCode;
-                        rotationLeft = 0;
+                    if (rLeft >= 10) {
+                        const code = Math.floor(100000 + Math.random() * 900000).toString();
+                        await setDoc(sessionRef, { code: code, active: true });
+                        document.getElementById('mainDisplayCode').innerText = code;
+                        document.getElementById('projectorCode').innerText = code;
+                        rLeft = 0;
                     }
-                    rotationLeft++; sessionLeft--;
-                    document.getElementById('timerBar').style.width = (rotationLeft * 10) + "%";
-                    document.getElementById('projectorBar').style.width = (rotationLeft * 10) + "%";
-                    document.getElementById('rotationSeconds').innerText = 10 - rotationLeft;
-                    let m = Math.floor(sessionLeft / 60); let s = sessionLeft % 60;
-                    document.getElementById('sessionTimer').innerText = `${m}:${s < 10 ? '0'+s : s}`;
-                    if (sessionLeft <= 0) handleSession();
+                    rLeft++; sLeft--;
+                    
+                    const pct = (rLeft * 10) + "%";
+                    document.getElementById('timerBar').style.width = pct;
+                    document.getElementById('projectorBar').style.width = pct;
+                    document.getElementById('rotSec').innerText = 10 - rLeft;
+                    
+                    let m = Math.floor(sLeft/60); let s = sLeft%60;
+                    document.getElementById('sessionTimer').innerText = `${m}:${s<10?'0'+s:s}`;
+                    
+                    if (sLeft <= 0) handleSession(); // Auto Stop
                 }, 1000);
             } else {
                 clearInterval(masterInterval);
@@ -194,48 +346,15 @@
             }
         };
 
-        function initTeacherSide() {
-            onSnapshot(query(collection(db, "attendance"), where("subjectId", "==", "CS101")), (snap) => {
-                document.getElementById('liveCount').innerText = snap.size;
+        function initTeacher() {
+            onSnapshot(query(collection(db, "attendance"), where("subjectId", "==", "CS101")), (s) => {
+                document.getElementById('liveCount').innerText = s.size;
                 const container = document.getElementById('logContainer');
-                container.innerHTML = snap.docs.map(d => `
-                    <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-100">
-                        <div class="w-2 h-2 bg-emerald-500 rounded-full"></div>
-                        <span class="font-bold text-sm">${d.data().studentName}</span>
-                    </div>
-                `).join('');
-            });
-        }
+                
+                if(s.size === 0) {
+                    container.innerHTML = '<p class="text-slate-400 italic text-sm text-center mt-10">No students joined yet.</p>';
+                    return;
+                }
 
-        window.openProjector = () => document.getElementById('projectorOverlay').classList.remove('hidden');
-        window.closeProjector = () => document.getElementById('projectorOverlay').classList.add('hidden');
-
-        window.submitCode = async () => {
-            const entered = document.getElementById('codeEntry').value;
-            const sessionSnap = await getDoc(doc(db, "sessions", "CS101"));
-            if (sessionSnap.exists() && sessionSnap.data().active) {
-                if (sessionSnap.data().code === entered) {
-                    await addDoc(collection(db, "attendance"), {
-                        studentId: auth.currentUser.uid, studentName: userData.name,
-                        subjectId: "CS101", timestamp: serverTimestamp()
-                    });
-                    alert("Attendance Recorded!");
-                    document.getElementById('codeEntry').value = "";
-                } else { alert("Incorrect Code!"); }
-            } else { alert("No active session."); }
-        };
-
-        function initStudentSide(uid) {
-            onSnapshot(query(collection(db, "attendance"), where("studentId", "==", uid)), (snap) => {
-                const history = document.getElementById('studentHistory');
-                history.innerHTML = snap.docs.map(d => `
-                    <div class="flex justify-between items-center p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                        <span class="font-bold">CS101 Lecture</span>
-                        <span class="text-xs bg-emerald-500 text-white px-3 py-1 rounded-full">Present</span>
-                    </div>
-                `).join('');
-            });
-        }
-    </script>
-</body>
-</html>
+                container.innerHTML = s.docs.map(d => `
+                    <div class="flex items-center gap-3 
